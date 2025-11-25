@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Apo-CHAOS-lypse")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+14da84ccb607185536a5dfb425e070d15cdc2256")]
 [assembly: System.Reflection.AssemblyProductAttribute("Apo-CHAOS-lypse")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Apo-CHAOS-lypse")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
