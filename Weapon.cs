@@ -13,25 +13,30 @@ public abstract class Weapon
 
     public string Name { get; }
     public Color ProjectileColor { get; }
+    public float ShotShake { get; }
 
-    protected Weapon(string name, float cooldown, Color projectileColor)
+    protected Weapon(string name, float cooldown, Color projectileColor, float shotShake)
     {
         Name = name;
         Cooldown = cooldown;
         ProjectileColor = projectileColor;
+        ShotShake = shotShake;
     }
 
-    public void TryFire(GameTime gameTime, Player player, MouseState mouseState, List<Projectile> projectiles, IReadOnlyList<Enemy> enemies)
+    public bool TryFire(GameTime gameTime, Player player, MouseState mouseState, List<Projectile> projectiles, IReadOnlyList<Enemy> enemies, out float shake)
     {
+        shake = 0f;
         var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (_cooldownTimer > 0)
             _cooldownTimer -= dt;
 
         if (!mouseState.LeftButton.Equals(ButtonState.Pressed) || _cooldownTimer > 0)
-            return;
+            return false;
 
         Fire(player, projectiles, enemies);
         _cooldownTimer = Cooldown;
+        shake = ShotShake;
+        return true;
     }
 
     protected abstract void Fire(Player player, List<Projectile> projectiles, IReadOnlyList<Enemy> enemies);
@@ -44,8 +49,8 @@ public class GunWeapon : Weapon
     private readonly int _damage;
     private readonly Vector2 _size;
 
-    public GunWeapon(string name, float cooldown, Color projectileColor, Texture2D pixel, float speed, int damage, Vector2 size)
-        : base(name, cooldown, projectileColor)
+    public GunWeapon(string name, float cooldown, Color projectileColor, Texture2D pixel, float speed, int damage, Vector2 size, float shake)
+        : base(name, cooldown, projectileColor, shake)
     {
         _pixel = pixel;
         _speed = speed;
@@ -68,7 +73,8 @@ public class RocketLauncher : Weapon
     private readonly float _speed;
     private readonly int _damage;
 
-    public RocketLauncher(Texture2D pixel) : base("Rocket Launcher", 0.8f, Color.OrangeRed)
+    // Shot Shake originally in 12f, but I decided to let it in 50f
+    public RocketLauncher(Texture2D pixel) : base("Rocket Launcher", 0.8f, Color.OrangeRed, 50f)
     {
         _pixel = pixel;
         _speed = 300f;
@@ -88,7 +94,7 @@ public class Katana : Weapon
 {
     private readonly Texture2D _pixel;
 
-    public Katana(Texture2D pixel) : base("Katana", 0.35f, Color.LightGray)
+    public Katana(Texture2D pixel) : base("Katana", 0.35f, Color.LightGray, 2f)
     {
         _pixel = pixel;
     }

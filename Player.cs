@@ -74,7 +74,10 @@ public class Player : ScaledSprite
         Velocity = velocity; // reasignás la propiedad completa
 
         ApplyMovement(dt, platforms);
-        CurrentWeapon?.TryFire(gameTime, this, mouseState, projectiles, enemies);
+        if (CurrentWeapon != null && CurrentWeapon.TryFire(gameTime, this, mouseState, projectiles, enemies, out var shake))
+        {
+            PendingShake = Math.Max(PendingShake, shake);
+        }    
     }
 
 
@@ -164,4 +167,13 @@ public class Player : ScaledSprite
 
         Position = newPosition;
     }
+
+    public float ConsumePendingShake()
+    {
+        var shake = PendingShake;
+        PendingShake = 0f;
+        return shake;
+    }
+
+    public float PendingShake { get; private set; }
 }
